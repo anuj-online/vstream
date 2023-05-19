@@ -2,6 +2,7 @@ package com.app.backend;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.FileNameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.FileSystemResource;
@@ -18,6 +19,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class VideoService {
     private static final Map<String, VideoFile> files = new HashMap<>();
+
+    @Cacheable("files")
+    private static Map<String, VideoFile> getFiles(){
+        return files;
+    }
+
     private static final List<String> videoFileFormats = List.of("mp4", "mov", "mkv", "flv", "m4v");
 
     public VideoService(@Value("${com.app.vstream.video-path}") String videoFolder) {
@@ -28,14 +35,16 @@ public class VideoService {
         var voidCompletableFuture = CompletableFuture.runAsync(() -> {
             log.info("scanning for files.");
             var videoFiles = getVideoFiles(new File(videoFolder));
-            videoFiles.forEach(videoFile -> files.computeIfAbsent(videoFile.getIdentifier().toString(), s -> videoFile));
+            videoFiles.forEach(videoFile -> getFiles().computeIfAbsent(videoFile.getIdentifier().toString(), s -> videoFile));
             log.info("Finished scanning files. Scanned total of {} videos", videoFiles.size());
         });
     }
 
-    @Cacheable("files")
     public Set<VideoFile> videoLists() {
-        return new HashSet<>(files.values()).stream().sorted(Comparator.comparing(VideoFile::getName)).collect(Collectors.toCollection(LinkedHashSet::new));
+        return new HashSet<>(getFiles().values()).stream().sorted(Comparator.comparing(VideoFile::getName)).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+    public VideoFile getVideo(String identifier){
+        return getFiles().get(identifier);
     }
 
     private Set<VideoFile> getVideoFiles(File videoDir) {
@@ -69,7 +78,7 @@ public class VideoService {
 
     public Mono<Resource> getVideoStream(String fileName) {
         return Mono.fromSupplier(() -> {
-            var file = new File(files.get(fileName).getFullPath());
+            var file = new File(getFiles().get(fileName).getFullPath());
             return new FileSystemResource(file.getAbsolutePath());
         });
     }
