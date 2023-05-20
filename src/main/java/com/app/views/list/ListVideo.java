@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Lazy;
 @Route(value = "", layout = AppLayoutBottomNavBar.class)
 @Lazy
 //@Tag(value = "div")
-public class ListVideo extends Div {
+public class ListVideo extends Scroller {
     public ListVideo(VideoService videoService) {
         super();
         setWidthFull();
@@ -78,7 +78,8 @@ public class ListVideo extends Div {
             parentDiv.add(movieDiv);
         });
 
-        add(parentDiv);
+        setContent(parentDiv);
+        setScrollDirection(ScrollDirection.VERTICAL);
     }
 
     private static Renderer<VideoFile> createToggleDetailsRenderer(String name) {
