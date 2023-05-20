@@ -2,10 +2,9 @@ package com.app.views;
 
 import com.app.views.list.ListVideo;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ScrollOptions;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.tabs.Tab;
@@ -16,7 +15,7 @@ public class AppLayoutBottomNavBar extends AppLayout {
 
     public AppLayoutBottomNavBar() {
         super();
-
+        getStyle().set("display", "flex");
         H1 title = new H1("HomeFlix");
         getStyle().set("background-color", """
                 linear-gradient(180deg, white,white 50%),
@@ -26,7 +25,7 @@ public class AppLayoutBottomNavBar extends AppLayout {
                 .set("left", "var(--lumo-space-l)").set("margin-left", "100")
                 .set("position", "center");
         Tabs tabs = getTabs();
-
+        getStyle().set("overflow", "none");
         var content = new Scroller();
         content.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
         content.getStyle()
@@ -34,10 +33,9 @@ public class AppLayoutBottomNavBar extends AppLayout {
         .set("left", "var(--lumo-space-l)")
         .set("right", "var(--lumo-space-l)")
                 .set("padding", "100");
-
         addToNavbar(title);
         addToNavbar(true, tabs);
-
+        scrollIntoView(new ScrollOptions(ScrollOptions.Behavior.AUTO));
         setContent(content);
     }
 

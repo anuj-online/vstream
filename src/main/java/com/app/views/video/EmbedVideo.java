@@ -1,21 +1,11 @@
 package com.app.views.video;
 
 import com.app.backend.VideoService;
-import com.app.views.AppLayoutBottomNavBar;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,12 +13,17 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @PageTitle("HomeFlix")
-@Route(value = "play", layout = AppLayoutBottomNavBar.class)
+@Route(value = "play")
 public class EmbedVideo extends VerticalLayout implements HasUrlParameter<String> {
-    @Autowired
     private VideoService service;
-    public EmbedVideo() {
+    public EmbedVideo(VideoService service) {
         super();
+        this.service = service;
+        getStyle().set("background", """
+                linear-gradient(black,#501414)
+                """);
+        setWidthFull();
+        setHeightFull();
         setAlignItems(FlexComponent.Alignment.CENTER);
     }
 
@@ -37,9 +32,14 @@ public class EmbedVideo extends VerticalLayout implements HasUrlParameter<String
         var video = new Video(s);
         add(video);
         H1 header = new H1("Now Playing ");
+        header.getStyle()
+                .set("color", "white");
         var name = service.getVideo(s).getName();
         H1 movieName = new H1(name);
-        header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
+        movieName
+                .getStyle()
+                        .set("color", "white");
+        header.addClassNames(LumoUtility.Margin.Top.MEDIUM, LumoUtility.Margin.Bottom.MEDIUM);
         add(header);
         add(movieName);
     }

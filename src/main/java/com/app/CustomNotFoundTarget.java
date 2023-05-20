@@ -2,7 +2,6 @@ package com.app;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.router.*;
 import jakarta.servlet.http.HttpServletResponse;
