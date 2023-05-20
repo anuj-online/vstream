@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
@@ -15,22 +16,25 @@ public class AppLayoutBottomNavBar extends AppLayout {
 
     public AppLayoutBottomNavBar() {
         super();
-        H1 title = new H1("HomeFlix");
 
+        H1 title = new H1("HomeFlix");
+        getStyle().set("background-color", """
+                linear-gradient(180deg, white,white 50%),
+                linear-gradient(180deg, white, black 50%
+                """);
         title.getStyle().set("font-size", "var(--lumo-font-size-l)")
-                .set("left", "var(--lumo-space-l)").set("margin", "100")
+                .set("left", "var(--lumo-space-l)").set("margin-left", "100")
                 .set("position", "center");
         Tabs tabs = getTabs();
 
-        H2 viewTitle = new H2("View title");
-
-        Div content = new Div();
-        content.getStyle().set("margin", "100")
+        var content = new Scroller();
+        content.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
+        content.getStyle()
                 .set("position", "center")
         .set("left", "var(--lumo-space-l)")
+        .set("right", "var(--lumo-space-l)")
                 .set("padding", "100");
 
-        content.add(viewTitle);
         addToNavbar(title);
         addToNavbar(true, tabs);
 

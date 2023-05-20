@@ -4,23 +4,20 @@ import com.app.backend.VideoFile;
 import com.app.backend.VideoService;
 import com.app.views.AppLayoutBottomNavBar;
 import com.app.views.video.EmbedVideo;
-import com.vaadin.flow.component.HtmlContainer;
-import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 import org.springframework.context.annotation.Lazy;
 
 @PageTitle("HomeFlix")
@@ -28,51 +25,65 @@ import org.springframework.context.annotation.Lazy;
 @Route(value = "", layout = AppLayoutBottomNavBar.class)
 @Lazy
 //@Tag(value = "div")
-public class ListVideo extends HorizontalLayout {
-    private final Grid<VideoFile> grid = new Grid<>(VideoFile.class, false);
+public class ListVideo extends Div {
     public ListVideo(VideoService videoService) {
         super();
-        var div = new Div();
-        div.getStyle().set("margin", "10");
-        div.getStyle().set("padding", "10");
-//        setAlignItems(FlexComponent.Alignment.CENTER);
-        grid.setColumns("name");
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        grid.setAllRowsVisible(true);
-        grid.addColumn(createToggleDetailsRenderer(grid));
-        grid.getStyle().set("background-image","linear-gradient(grey, black)");
-        grid.setTabIndex(2);
-        grid.getElement().getStyle().set("background-image","linear-gradient(grey, black)");
-//        add(grid);
+        setWidthFull();
+        setHeightFull();
+//        setScrollDirection(ScrollDirection.VERTICAL);
+//        getStyle().set("overflow","auto");
+        var parentDiv = new Div();
+        parentDiv.getStyle().set("margin", "10");
+        parentDiv.getStyle().set("padding", "10");
+        parentDiv.getStyle().set("display", "inline-block");
 
-        var dataProvider = new ListDataProvider<VideoFile>(videoService.videoLists());
+        var dataProvider = new ListDataProvider<>(videoService.videoLists());
         dataProvider.getItems().forEach(videoFile -> {
 
-            Button title = new Button(new Icon(VaadinIcon.PLAY_CIRCLE));
-            title.addThemeVariants(ButtonVariant.LUMO_ICON);
-            title.setHeight("100px");
-            title.setWidth("10px");
-            title.setText(videoFile.getName());
-            div.add(title);
-            title.addClickListener(clickEvent -> {
-                UI.getCurrent().navigate(EmbedVideo.class, videoFile.getIdentifier().toString());
-            });
-        });
-        grid.setItems(dataProvider);
-        setPadding(true);
-        setMargin(true);
-        setAlignItems(Alignment.CENTER);
-        setWidthFull();
-        add(div);
+//            Button title = new Button(new Icon(VaadinIcon.PLAY_CIRCLE));
+//            title.addThemeVariants(ButtonVariant.LUMO_ICON);
+//            title.setHeight("100px");
+//            title.setWidth("10px");
+//            title.getStyle().set("transition","all 0.3s ease 0s");
+//            title.getStyle().set("cursor","pointer");
+//            var name = videoFile.getName();
+//            title.setText(name);
+//            title.setTooltipText(name);
 
+            Image image = new Image("icons/icon.png", "");
+
+            image.setText(videoFile.getName());
+            image.setAlt(videoFile.getName());
+
+            image.setHeight("100%");
+            image.setWidth("90%");
+            //transform: translateY(-7px) //TODO add hover the title on mouse over
+            image.getStyle().set("margin", "10px");
+            image.getStyle().set("opacity", "0.5");
+            image.getStyle().set("cursor", "pointer");
+            image.getStyle().set("box-shadow", "10px 10px 10px black");
+            image.getStyle().set("transition", "all 0.3s ease 0s");
+
+            image.addClickListener(clickEvent -> UI.getCurrent().navigate(EmbedVideo.class, videoFile.getIdentifier().toString()));
+            var text = new Label(videoFile.getName());
+            text.setWidth("80%");
+            text.setWhiteSpace(HasText.WhiteSpace.PRE_WRAP);
+            text.setWidthFull();
+            var movieDiv = new Div();
+            movieDiv.getStyle().set("display", "inline-block");
+            movieDiv.add(image);
+            movieDiv.add(text);
+            movieDiv.setHeight("300px");
+            movieDiv.setWidth("19%");
+            parentDiv.add(movieDiv);
+        });
+
+        add(parentDiv);
     }
-    private static Renderer<VideoFile> createToggleDetailsRenderer(
-            Grid<VideoFile> grid) {
-        return LitRenderer.<VideoFile> of(
-                        "<vaadin-button theme=\"secondary\" @click=\"${handleClick}\">Play</vaadin-button>")
-                .withFunction("handleClick",
-                        movie -> {
-                            UI.getCurrent().navigate(EmbedVideo.class, movie.getIdentifier().toString());
-                        });
+
+    private static Renderer<VideoFile> createToggleDetailsRenderer(String name) {
+        return LitRenderer.<VideoFile>of("<vaadin-button height=\"100px\" width\"10px\" theme=\"secondary\" @click=\"${handleClick}\">" + name + "</vaadin-button>").withFunction("handleClick", movie -> {
+            UI.getCurrent().navigate(EmbedVideo.class, movie.getIdentifier().toString());
+        });
     }
 }

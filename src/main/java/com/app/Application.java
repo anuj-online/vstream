@@ -8,6 +8,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * The entry point of the Spring Boot application.
@@ -17,7 +19,7 @@ import org.springframework.cache.annotation.EnableCaching;
  */
 @SpringBootApplication
 @EnableCaching
-@Theme(value = "vstream", variant = Lumo.DARK)
+@Theme(value = "vstream", variant = Lumo.LIGHT)
 @PWA(shortName = "homeflix", name="homeflix", offlinePath = "offline.html", manifestPath = "sw.webmanifest")
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
     public static void main(String[] args) {

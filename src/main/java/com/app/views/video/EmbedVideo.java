@@ -2,18 +2,25 @@ package com.app.views.video;
 
 import com.app.backend.VideoService;
 import com.app.views.AppLayoutBottomNavBar;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @PageTitle("HomeFlix")
 @Route(value = "play", layout = AppLayoutBottomNavBar.class)
@@ -27,14 +34,23 @@ public class EmbedVideo extends VerticalLayout implements HasUrlParameter<String
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
-        Video video = new Video(s);
-        video.setMaxWidth("500px");
+        var video = new Video(s);
         add(video);
         H1 header = new H1("Now Playing ");
         var name = service.getVideo(s).getName();
-        H1 movieName = new H1(name.substring(0, name.indexOf(".")));
-        add(movieName);
+        H1 movieName = new H1(name);
         header.addClassNames(LumoUtility.Margin.Top.XLARGE, LumoUtility.Margin.Bottom.MEDIUM);
         add(header);
+        add(movieName);
+    }
+
+    @ControllerAdvice
+    static class A extends ResponseEntityExceptionHandler {
+
+        @ExceptionHandler(value = {NotFoundException.class})
+        protected ResponseEntity<Object> handleConflict(
+                RuntimeException ex, WebRequest request) {
+            return null;
+        }
     }
 }
