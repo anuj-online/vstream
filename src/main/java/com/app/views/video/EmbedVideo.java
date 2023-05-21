@@ -29,19 +29,20 @@ public class EmbedVideo extends VerticalLayout implements HasUrlParameter<String
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
-        var video = new Video(s);
+        var name = service.getVideo(s).getFullPath();
+        var video = new Video(name);
         add(video);
         H1 header = new H1("Now Playing ");
         header.getStyle()
                 .set("color", "white");
-        var name = service.getVideo(s).getName();
+
         H1 movieName = new H1(name);
         movieName
                 .getStyle()
                         .set("color", "white");
         header.addClassNames(LumoUtility.Margin.Top.MEDIUM, LumoUtility.Margin.Bottom.MEDIUM);
         add(header);
-        add(movieName);
+//        add(movieName);
     }
 
     @ControllerAdvice

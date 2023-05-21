@@ -13,10 +13,10 @@ public class Video extends HtmlContainer {
     );
 
     public Video(String src) {
-        setSrc("video/" + src);
+        setSrc(src);
         getElement().setProperty("controls", true);
         getElement().setProperty("autoplay", true);
-        setMaxWidth("500px");
+        setMaxWidth(getWidth());
     }
 
     public String getSrc() {

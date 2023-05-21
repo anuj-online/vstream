@@ -17,7 +17,6 @@ public class VideoController {
 
     @GetMapping(value = "video/{title}", produces = {"video/mp4", "video/mov", "video/mkv", "video/flv", "video/m4v"})
     public Mono<Resource> getVideos(@PathVariable String title, @RequestHeader("Range") String range) {
-        var videoStream = service.getVideoStream(title);
-        return videoStream;
+        return service.getVideoStream(title);
     }
 }
