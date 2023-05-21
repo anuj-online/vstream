@@ -20,21 +20,6 @@ public class SecretService {
         this.key = key;
     }
 
-    public static void main(String[] args) throws Exception {
-        var secretSer = new SecretService("1qazxsw23edcvfr4");
-
-        var movies = Files.readString(Path.of(SecretService.class.getClassLoader().getResource("movie.json").getPath()));
-        var encrypt = secretSer.encrypt(movies);
-        var file = new File("mv.txt");
-        Files.write(Path.of(file.getPath()), encrypt);
-//
-//
-//        var movie = Files.readAllBytes(Path.of(SecretService.class.getClassLoader().getResource("movie.looper").getPath()));
-//        var decrypt = secretSer.decrypt(movie);
-//        System.out.println(decrypt + "ANUJ");
-
-    }
-
     public byte[] encrypt(String text) {
         try {
             SecretKeySpec aesKey = new SecretKeySpec(key.getBytes(), ENCRYPT_ALGO);
