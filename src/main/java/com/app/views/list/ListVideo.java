@@ -1,7 +1,7 @@
 package com.app.views.list;
 
-import com.app.backend.VideoFile;
-import com.app.backend.VideoService;
+import com.app.backend.services.VServiceInterface;
+import com.app.backend.controllers.VideoFile;
 import com.app.views.video.EmbedVideo;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.ScrollOptions;
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Lazy;
 @Route(value = "")
 @Lazy
 public class ListVideo extends Scroller {
-    public ListVideo(VideoService videoService) {
+    public ListVideo(VServiceInterface videoService) {
         super();
         getStyle().set("background", """
                 linear-gradient(black,#501414)
@@ -36,7 +36,7 @@ public class ListVideo extends Scroller {
         var dataProvider = new ListDataProvider<>(videoService.videoLists());
         dataProvider.getItems().forEach(videoFile -> {
 
-            Image image = new Image("icons/icon.png", "");
+            Image image = new Image("https://drive.google.com/uc?id=1o7rhnNVIqG9gDgTMLD4MWZzPAo9j8DXG&authuser=2&export=download", "");
             parentDiv.scrollIntoView();
             image.setText(videoFile.getName());
             image.setAlt(videoFile.getName());

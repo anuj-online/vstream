@@ -1,6 +1,6 @@
 package com.app.views.video;
 
-import com.app.backend.VideoService;
+import com.app.backend.services.VServiceInterface;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,8 +15,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @PageTitle("HomeFlix")
 @Route(value = "play")
 public class EmbedVideo extends VerticalLayout implements HasUrlParameter<String> {
-    private VideoService service;
-    public EmbedVideo(VideoService service) {
+    private VServiceInterface service;
+    public EmbedVideo(VServiceInterface service) {
         super();
         this.service = service;
         getStyle().set("background", """
