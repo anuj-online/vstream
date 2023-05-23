@@ -1,7 +1,7 @@
 package com.app.views.list;
 
-import com.app.backend.VideoFile;
-import com.app.backend.VideoService;
+import com.app.backend.service.VAccess;
+import com.app.backend.service.VideoFile;
 import com.app.views.video.EmbedVideo;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.ScrollOptions;
@@ -20,9 +20,11 @@ import org.springframework.context.annotation.Lazy;
 @PageTitle("HomeFlix")
 @Route(value = "")
 @Lazy
-public class ListVideo extends Scroller {
-    public ListVideo(VideoService videoService) {
+public class Browse extends Scroller {
+    public Browse(VAccess videoService) {
         super();
+        setHeightFull();
+        setWidthFull();
         getStyle().set("background", """
                 linear-gradient(black,#501414)
                 """);
@@ -33,9 +35,8 @@ public class ListVideo extends Scroller {
         parentDiv.getStyle().set("display", "inline-block");
         scrollIntoView();
         var scrollOptions = new ScrollOptions(ScrollOptions.Behavior.SMOOTH);
-        var dataProvider = new ListDataProvider<>(videoService.videoLists());
+        var dataProvider = new ListDataProvider<>(videoService.videoList());
         dataProvider.getItems().forEach(videoFile -> {
-
             Image image = new Image("icons/icon.png", "");
             parentDiv.scrollIntoView();
             image.setText(videoFile.getName());
@@ -50,7 +51,7 @@ public class ListVideo extends Scroller {
             image.getStyle().set("box-shadow", "10px 10px 10px black");
             image.getStyle().set("transition", "all 0.3s ease 0s");
 
-            image.addClickListener(clickEvent -> UI.getCurrent().navigate(EmbedVideo.class, videoFile.getIdentifier().toString()));
+            image.addClickListener(clickEvent -> UI.getCurrent().navigate(EmbedVideo.class, videoFile.getIdentifier()));
             var text = new Label(videoFile.getName());
             text.getStyle().set("color", "white");
 //            text.getStyle().set()
@@ -72,7 +73,7 @@ public class ListVideo extends Scroller {
 
     private static Renderer<VideoFile> createToggleDetailsRenderer(String name) {
         return LitRenderer.<VideoFile>of("<vaadin-button height=\"100px\" width\"10px\" theme=\"secondary\" @click=\"${handleClick}\">" + name + "</vaadin-button>").withFunction("handleClick", movie -> {
-            UI.getCurrent().navigate(EmbedVideo.class, movie.getIdentifier().toString());
+            UI.getCurrent().navigate(EmbedVideo.class, "");
         });
     }
 }

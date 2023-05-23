@@ -1,6 +1,6 @@
 package com.app.views;
 
-import com.app.views.list.ListVideo;
+import com.app.views.list.Browse;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ScrollOptions;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -30,8 +30,8 @@ public class AppLayoutBottomNavBar extends AppLayout {
         content.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
         content.getStyle()
                 .set("position", "center")
-        .set("left", "var(--lumo-space-l)")
-        .set("right", "var(--lumo-space-l)")
+                .set("left", "var(--lumo-space-l)")
+                .set("right", "var(--lumo-space-l)")
                 .set("padding", "100");
         addToNavbar(title);
         addToNavbar(true, tabs);
@@ -41,7 +41,7 @@ public class AppLayoutBottomNavBar extends AppLayout {
 
     private Tabs getTabs() {
         var tabs = new Tabs();
-        tabs.add(createMenuItem("Home", VaadinIcon.HOME, ListVideo.class));
+        tabs.add(createMenuItem("Home", VaadinIcon.HOME, Browse.class));
         return tabs;
     }
 

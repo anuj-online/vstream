@@ -16,7 +16,8 @@ public class Video extends HtmlContainer {
         setSrc("video/" + src);
         getElement().setProperty("controls", true);
         getElement().setProperty("autoplay", true);
-        setMaxWidth("500px");
+        getStyle().set("width", "100%");
+        getStyle().set("height", "90%");
     }
 
     public String getSrc() {

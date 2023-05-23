@@ -1,6 +1,8 @@
 package com.app.backend;
 
-import org.springframework.core.io.Resource;
+import com.app.backend.service.VAccess;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -8,16 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
+@Slf4j
 public class VideoController {
-    private final VideoService service;
+    private final VAccess service;
 
-    public VideoController(VideoService service) {
+    public VideoController(VAccess service) {
         this.service = service;
     }
 
-    @GetMapping(value = "video/{title}", produces = {"video/mp4", "video/mov", "video/mkv", "video/flv", "video/m4v"})
-    public Mono<Resource> getVideos(@PathVariable String title, @RequestHeader("Range") String range) {
-        var videoStream = service.getVideoStream(title);
-        return videoStream;
+    @GetMapping(value = "video/{identifier}", produces = {"video/mp4", "video/mov", "video/mkv", "video/flv", "video/m4v"})
+    public Mono<ResponseEntity<?>> getVideos(@PathVariable String identifier, @RequestHeader("Range") String range) {
+        log.info("Range {}", range);
+        return Mono.fromSupplier(() -> service.getVideoStream(identifier, range));
     }
 }

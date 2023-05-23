@@ -1,12 +1,12 @@
-package com.app.backend;
+package com.app.backend.service;
 
 import lombok.Data;
-
-import java.util.UUID;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class VideoFile {
-    private UUID identifier;
+    private String identifier;
     private String name;
     private long size;
     private boolean file;

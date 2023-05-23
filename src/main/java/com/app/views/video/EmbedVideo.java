@@ -1,8 +1,14 @@
 package com.app.views.video;
 
-import com.app.backend.VideoService;
+import com.app.backend.service.VAccess;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -12,11 +18,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+
 @PageTitle("HomeFlix")
 @Route(value = "play")
 public class EmbedVideo extends VerticalLayout implements HasUrlParameter<String> {
-    private VideoService service;
-    public EmbedVideo(VideoService service) {
+    private final VAccess service;
+
+    public EmbedVideo(VAccess service) {
         super();
         this.service = service;
         getStyle().set("background", """
@@ -29,19 +37,32 @@ public class EmbedVideo extends VerticalLayout implements HasUrlParameter<String
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String s) {
+        var horizontalLayout = new HorizontalLayout();
+        horizontalLayout.getStyle().set("background", """
+                black)
+                """);
+        var back = new Button(new Icon(VaadinIcon.ARROW_LEFT));
+        back.addThemeVariants(ButtonVariant.LUMO_ICON);
+        add(back);
+
+        back.addClickListener(event -> UI.getCurrent().navigate(""));
+        var name = service.getDisplayName(s);
         var video = new Video(s);
-        add(video);
         H1 header = new H1("Now Playing ");
         header.getStyle()
                 .set("color", "white");
-        var name = service.getVideo(s).getName();
         H1 movieName = new H1(name);
         movieName
                 .getStyle()
-                        .set("color", "white");
+                .set("color", "white");
         header.addClassNames(LumoUtility.Margin.Top.MEDIUM, LumoUtility.Margin.Bottom.MEDIUM);
         add(header);
-        add(movieName);
+        horizontalLayout.setHeightFull();
+        horizontalLayout.setWidthFull();
+        horizontalLayout.add(back);
+        horizontalLayout.add(video);
+
+        add(horizontalLayout);
     }
 
     @ControllerAdvice

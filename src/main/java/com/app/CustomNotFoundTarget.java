@@ -18,6 +18,7 @@ public class CustomNotFoundTarget
         return HttpServletResponse.SC_TEMPORARY_REDIRECT;
     }
 }
+
 class MainLayout extends Div
         implements RouterLayout {
     @Override

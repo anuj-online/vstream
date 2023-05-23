@@ -17,8 +17,8 @@ import org.springframework.cache.annotation.EnableCaching;
  */
 @SpringBootApplication
 @EnableCaching
-@Theme(value = "vstream", variant = Lumo.LIGHT)
-@PWA(shortName = "homeflix", name="homeflix", offlinePath = "offline.html", manifestPath = "sw.webmanifest")
+@Theme(value = "vstream", variant = Lumo.DARK)
+@PWA(shortName = "homeflix", name = "homeflix", offlinePath = "offline.html", manifestPath = "sw.webmanifest")
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
