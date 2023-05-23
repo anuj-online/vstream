@@ -6,5 +6,5 @@ FROM eclipse-temurin:17-jre
 COPY --from=build /a/target/*.jar app.jar
 COPY --from=build /a/gdrivemoviedb.json /file/movie.json
 RUN rm -fr /a
-EXPOSE 8080
+EXPOSE 10000
 ENTRYPOINT ["java", "-jar", "/app.jar"]
