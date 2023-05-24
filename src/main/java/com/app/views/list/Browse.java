@@ -17,12 +17,19 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.context.annotation.Lazy;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @PageTitle("HomeFlix")
 @Route(value = "")
 @Lazy
 public class Browse extends Scroller {
     public Browse(VAccess videoService) {
         super();
+        AtomicBoolean isTouchDevice = new AtomicBoolean();
+        UI.getCurrent().getPage().retrieveExtendedClientDetails(extendedClientDetails -> {
+            isTouchDevice.set(extendedClientDetails.isTouchDevice());
+
+        });
         setHeightFull();
         setWidthFull();
         getStyle().set("background", """

@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@Profile({"localdb", "gdrive"})
 public class TempDB {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final Map<String, VideoDAOData> movieMap = new HashMap<>();

@@ -2,6 +2,7 @@ package com.app.backend;
 
 import com.app.backend.dao.TempDB;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin")
 @Slf4j
+@Profile({"localdb", "gdrive"})
 public class AdminController {
     private final TempDB videoDB;
 

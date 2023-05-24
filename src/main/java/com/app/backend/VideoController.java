@@ -18,7 +18,7 @@ public class VideoController {
         this.service = service;
     }
 
-    @GetMapping(value = "video/{identifier}", produces = {"video/mp4", "video/mov", "video/mkv", "video/flv", "video/m4v"})
+    @GetMapping(value = "video/{identifier}", produces = {"video/ogg", "video/mov", "video/mkv", "video/flv", "video/m4v"})
     public Mono<ResponseEntity<?>> getVideos(@PathVariable String identifier, @RequestHeader("Range") String range) {
         log.info("Range {}", range);
         return Mono.fromSupplier(() -> service.getVideoStream(identifier, range));
