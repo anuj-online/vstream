@@ -9,8 +9,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 
@@ -27,24 +29,20 @@ import java.time.LocalDateTime;
 @PWA(shortName = "homeflix", name = "homeflix", offlinePath = "offline.html", manifestPath = "sw.webmanifest")
 @Slf4j
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
+    private static final RestTemplate REST_TEMPLATE = new RestTemplate();
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Scheduled(fixedDelay = 10000L)
     void keepAlive() {
-        var runtime = Runtime.getRuntime();
-        log.info("Keeping alive at \n |Time: {}| \n |currentThread{}| \n |activeCount{}| \n |processors {}| \n |freeMemory{}MB| \n |maxMemory {}MB|",
-                LocalDateTime.now(),
-                Thread.currentThread().getName(),
-                Thread.activeCount(),
-                runtime.availableProcessors(),
-                getMemoryInMB(runtime.freeMemory()),
-                getMemoryInMB(runtime.maxMemory()));
-    }
-
-    private static double getMemoryInMB(long runtime) {
-        return runtime / (double) (1024 * 1024);
+        try{
+            var responseEntity = REST_TEMPLATE.getForEntity("https://vstream-lqcq.onrender.com/actuator/health", String.class);
+            log.info("Service response code {}",responseEntity.getStatusCode());
+        }
+        catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
 }
